@@ -9,6 +9,7 @@
             --admin-color: #8e44ad;
             --secondary-color: #34a853;
             --danger-color: #ea4335;
+            --warning-color: #f39c12;
             --dark-color: #1a1a2e;
             --light-color: #f8f9fa;
             --border-radius: 12px;
@@ -31,19 +32,20 @@
 
         .admin-header {
             background: rgba(0, 0, 0, 0.3);
-            padding: 20px;
+            padding: 25px 20px;
             text-align: center;
-            border-bottom: 2px solid var(--admin-color);
+            border-bottom: 3px solid var(--admin-color);
         }
 
         .admin-badge {
             background: var(--admin-color);
             color: white;
-            padding: 5px 15px;
+            padding: 8px 20px;
             border-radius: 20px;
             font-size: 14px;
             display: inline-block;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            font-weight: bold;
         }
 
         .container {
@@ -56,20 +58,21 @@
             background: rgba(255, 255, 255, 0.1);
             border-radius: var(--border-radius);
             padding: 30px;
-            margin: 20px 0;
-            border-left: 4px solid var(--admin-color);
+            margin: 25px 0;
+            border-left: 5px solid var(--admin-color);
+            backdrop-filter: blur(10px);
         }
 
         .control-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
             margin: 30px 0;
         }
 
         .control-card {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 25px;
             border-radius: var(--border-radius);
             text-align: center;
             transition: var(--transition);
@@ -77,24 +80,26 @@
         }
 
         .control-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
             border-color: var(--admin-color);
+            background: rgba(255, 255, 255, 0.12);
         }
 
         .control-icon {
-            font-size: 40px;
-            margin-bottom: 15px;
+            font-size: 45px;
+            margin-bottom: 20px;
         }
 
         .btn {
-            padding: 12px 24px;
+            padding: 14px 28px;
             border: none;
             border-radius: var(--border-radius);
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
-            margin: 5px;
+            margin: 8px;
+            min-width: 160px;
         }
 
         .btn-admin {
@@ -112,37 +117,104 @@
             color: white;
         }
 
+        .btn-warning {
+            background: var(--warning-color);
+            color: white;
+        }
+
         .btn:hover {
-            transform: translateY(-2px);
+            transform: translateY(-3px);
             box-shadow: var(--box-shadow);
         }
 
         .status-board {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
         }
 
         .status-item {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 20px;
             border-radius: var(--border-radius);
             text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .member-link {
             display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
+            margin-top: 25px;
+            padding: 12px 25px;
             background: var(--secondary-color);
             color: white;
             border-radius: var(--border-radius);
             text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .member-link:hover {
+            background: #2e7d32;
+            transform: translateY(-2px);
+        }
+
+        .command-url {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 14px;
+            word-break: break-all;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: var(--admin-color);
+            color: white;
+            border-radius: var(--border-radius);
+            z-index: 1000;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            box-shadow: var(--box-shadow);
+            max-width: 400px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--admin-color);
+            border-radius: var(--border-radius);
+            color: var(--light-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .action-btn:hover {
+            background: var(--admin-color);
         }
     </style>
 </head>
 <body>
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
     <div class="admin-header">
         <div class="admin-badge">🛡️ MOD ADMIN - AKSES 24/7</div>
         <h1>SPIMF ADMIN SYSTEM</h1>
@@ -156,38 +228,50 @@
             <div class="status-board">
                 <div class="status-item">
                     <h3>📊 Status Sistem</h3>
-                    <p id="systemStatus" style="color: var(--secondary-color);">AKTIF</p>
+                    <p id="systemStatus" style="color: var(--secondary-color); font-size: 1.2em; font-weight: bold;">AKTIF</p>
                 </div>
                 <div class="status-item">
                     <h3>👥 Total Ahli</h3>
-                    <p id="totalMembers">0</p>
+                    <p id="totalMembers" style="font-size: 1.2em; font-weight: bold;">0</p>
                 </div>
                 <div class="status-item">
                     <h3>🕐 Masa Sistem</h3>
-                    <p id="adminTime">Loading...</p>
+                    <p id="adminTime" style="font-size: 1.1em;">Loading...</p>
                 </div>
+                <div class="status-item">
+                    <h3>📡 Status Sambungan</h3>
+                    <p id="connectionStatus" style="color: var(--secondary-color);">DISAMBUNG</p>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <button class="action-btn" onclick="quickBlock('Maintenance')">Block (Maintenance)</button>
+                <button class="action-btn" onclick="quickBlock('Update System')">Block (Update)</button>
+                <button class="action-btn" onclick="quickUnblock()">Aktifkan Semula</button>
+                <button class="action-btn" onclick="quickBroadcast('Selamat datang!')">Broadcast</button>
             </div>
 
             <div class="control-grid">
                 <div class="control-card">
                     <div class="control-icon">🚫</div>
                     <h3>Block Sistem</h3>
-                    <p>Block akses ke sistem utama</p>
+                    <p>Block akses ke sistem utama untuk ahli</p>
                     <button class="btn btn-danger" onclick="blockSystem()">Block Sistem</button>
                 </div>
 
                 <div class="control-card">
                     <div class="control-icon">✅</div>
                     <h3>Aktifkan Sistem</h3>
-                    <p>Buka akses ke sistem utama</p>
+                    <p>Buka akses ke sistem utama untuk ahli</p>
                     <button class="btn btn-success" onclick="activateSystem()">Aktifkan Sistem</button>
                 </div>
 
                 <div class="control-card">
-                    <div class="control-icon">📊</div>
-                    <h3>Lihat Statistik</h3>
-                    <p>Analisis penggunaan sistem</p>
-                    <button class="btn btn-admin" onclick="viewStats()">Lihat Statistik</button>
+                    <div class="control-icon">📢</div>
+                    <h3>Broadcast Message</h3>
+                    <p>Hantar mesej kepada semua ahli</p>
+                    <button class="btn btn-warning" onclick="sendBroadcast()">Hantar Broadcast</button>
                 </div>
 
                 <div class="control-card">
@@ -198,6 +282,20 @@
                 </div>
             </div>
 
+            <!-- Command URLs -->
+            <div style="margin-top: 30px;">
+                <h3>🔗 URL Perintah Cepat</h3>
+                <div class="command-url" id="blockUrl">
+                    https://spimf-membership.vercel.app/?command=block&reason=Maintenance
+                </div>
+                <div class="command-url" id="unblockUrl">
+                    https://spimf-membership.vercel.app/?command=unblock
+                </div>
+                <div class="command-url" id="broadcastUrl">
+                    https://spimf-membership.vercel.app/?command=broadcast&message=Hello
+                </div>
+            </div>
+
             <div style="text-align: center; margin-top: 30px;">
                 <button class="btn btn-admin" onclick="openMemberSystem()">
                     🔗 Buka Sistem Ahli
@@ -205,55 +303,223 @@
             </div>
         </div>
 
-        <a href="https://spimf-membership.vercel.app/" class="member-link" target="_blank">
-            👥 Pergi ke Sistem Ahli
-        </a>
+        <div style="text-align: center;">
+            <a href="https://spimf-membership.vercel.app/" class="member-link" target="_blank">
+                👥 Pergi ke Sistem Ahli
+            </a>
+        </div>
     </div>
 
     <script>
-        // Admin system functions
+        // System Configuration
+        const CONFIG = {
+            MEMBER_URL: 'https://spimf-membership.vercel.app',
+            SYNC_INTERVAL: 5000
+        };
+
+        // System State
+        let systemState = {
+            status: 'active',
+            lastCommand: null,
+            commandHistory: []
+        };
+
+        // DOM Elements
+        const systemStatusElement = document.getElementById('systemStatus');
+        const adminTimeElement = document.getElementById('adminTime');
+        const totalMembersElement = document.getElementById('totalMembers');
+        const connectionStatusElement = document.getElementById('connectionStatus');
+        const notificationElement = document.getElementById('notification');
+        const blockUrlElement = document.getElementById('blockUrl');
+        const unblockUrlElement = document.getElementById('unblockUrl');
+        const broadcastUrlElement = document.getElementById('broadcastUrl');
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const colors = {
+                info: '#8e44ad',
+                success: '#34a853',
+                warning: '#f39c12',
+                error: '#ea4335'
+            };
+            
+            notificationElement.style.background = colors[type] || colors.info;
+            notificationElement.textContent = message;
+            notificationElement.classList.add('show');
+            
+            setTimeout(() => {
+                notificationElement.classList.remove('show');
+            }, 5000);
+            
+            // Add to command history
+            systemState.commandHistory.push({
+                message: message,
+                type: type,
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        // Update admin time
         function updateAdminTime() {
             const now = new Date();
-            document.getElementById('adminTime').textContent = 
-                now.toLocaleString('ms-MY', { 
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
-                });
+            adminTimeElement.textContent = now.toLocaleString('ms-MY', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
         }
 
+        // Generate command URL
+        function generateCommandUrl(command, params = {}) {
+            const url = new URL(CONFIG.MEMBER_URL);
+            url.searchParams.set('command', command);
+            
+            Object.keys(params).forEach(key => {
+                if (params[key]) {
+                    url.searchParams.set(key, params[key]);
+                }
+            });
+            
+            return url.toString();
+        }
+
+        // Update command URLs
+        function updateCommandUrls() {
+            blockUrlElement.textContent = generateCommandUrl('block', { reason: 'Maintenance' });
+            unblockUrlElement.textContent = generateCommandUrl('unblock');
+            broadcastUrlElement.textContent = generateCommandUrl('broadcast', { message: 'Hello' });
+        }
+
+        // Block system
         function blockSystem() {
-            if (confirm('Adakah anda pasti ingin BLOCK sistem utama?')) {
-                localStorage.setItem('spimf_system_status', 'blocked');
-                document.getElementById('systemStatus').textContent = 'DI BLOCK';
-                document.getElementById('systemStatus').style.color = 'var(--danger-color)';
-                alert('Sistem utama telah di BLOCK! 🚫');
-            }
+            const reason = prompt('Masukkan sebab block sistem:') || 'Sistem di-block oleh admin';
+            
+            if (!reason) return;
+            
+            const blockUrl = generateCommandUrl('block', { reason: reason });
+            
+            // Open member system with block command
+            window.open(blockUrl, '_blank');
+            
+            systemState.status = 'blocked';
+            systemState.lastCommand = { action: 'block', reason: reason };
+            updateSystemStatus();
+            
+            showNotification(`Sistem telah di-block: ${reason}`, 'warning');
         }
 
+        // Activate system
         function activateSystem() {
-            localStorage.setItem('spimf_system_status', 'active');
-            document.getElementById('systemStatus').textContent = 'AKTIF';
-            document.getElementById('systemStatus').style.color = 'var(--secondary-color)';
-            alert('Sistem utama telah di AKTIFKAN! ✅');
+            const unblockUrl = generateCommandUrl('unblock');
+            
+            // Open member system with unblock command
+            window.open(unblockUrl, '_blank');
+            
+            systemState.status = 'active';
+            systemState.lastCommand = { action: 'unblock' };
+            updateSystemStatus();
+            
+            showNotification('Sistem telah diaktifkan', 'success');
         }
 
-        function viewStats() {
-            alert('Fungsi statistik akan dibangunkan kemudian...');
-            // Di sini boleh tambah analytics
+        // Send broadcast
+        function sendBroadcast() {
+            const message = prompt('Masukkan mesej broadcast:');
+            
+            if (!message) return;
+            
+            const broadcastUrl = generateCommandUrl('broadcast', { 
+                message: encodeURIComponent(message) 
+            });
+            
+            // Open member system with broadcast command
+            window.open(broadcastUrl, '_blank');
+            
+            systemState.lastCommand = { action: 'broadcast', message: message };
+            
+            showNotification(`Broadcast dihantar: ${message}`, 'info');
         }
 
+        // Quick actions
+        function quickBlock(reason) {
+            const blockUrl = generateCommandUrl('block', { reason: reason });
+            window.open(blockUrl, '_blank');
+            
+            systemState.status = 'blocked';
+            systemState.lastCommand = { action: 'block', reason: reason };
+            updateSystemStatus();
+            
+            showNotification(`Sistem di-block: ${reason}`, 'warning');
+        }
+
+        function quickUnblock() {
+            const unblockUrl = generateCommandUrl('unblock');
+            window.open(unblockUrl, '_blank');
+            
+            systemState.status = 'active';
+            systemState.lastCommand = { action: 'unblock' };
+            updateSystemStatus();
+            
+            showNotification('Sistem diaktifkan', 'success');
+        }
+
+        function quickBroadcast(message) {
+            const broadcastUrl = generateCommandUrl('broadcast', { 
+                message: encodeURIComponent(message) 
+            });
+            window.open(broadcastUrl, '_blank');
+            
+            showNotification(`Broadcast: ${message}`, 'info');
+        }
+
+        // Backup data
         function backupData() {
-            alert('Fungsi backup akan dibangunkan kemudian...');
-            // Di sini boleh tambah backup functionality
+            showNotification('Backup data sedang dibuat...', 'info');
+            
+            setTimeout(() => {
+                // Simulate backup process
+                const backupData = {
+                    systemState: systemState,
+                    timestamp: new Date().toISOString(),
+                    commandHistory: systemState.commandHistory
+                };
+                
+                // Create download link
+                const dataStr = JSON.stringify(backupData, null, 2);
+                const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `spimf-backup-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                
+                showNotification('Backup data berjaya!', 'success');
+            }, 2000);
         }
 
+        // Open member system
         function openMemberSystem() {
-            window.open('https://spimf-membership.vercel.app', '_blank');
+            window.open(CONFIG.MEMBER_URL, '_blank');
+        }
+
+        // Update system status display
+        function updateSystemStatus() {
+            systemStatusElement.textContent = systemState.status === 'active' ? 'AKTIF' : 'DI BLOCK';
+            systemStatusElement.style.color = systemState.status === 'active' ? 
+                'var(--secondary-color)' : 'var(--danger-color)';
+        }
+
+        // Simulate member count
+        function updateMemberCount() {
+            const count = Math.floor(Math.random() * 50) + 100;
+            totalMembersElement.textContent = count;
         }
 
         // Initialize admin system
@@ -261,16 +527,27 @@
             // Update time every second
             setInterval(updateAdminTime, 1000);
             updateAdminTime();
+            
+            // Update member count
+            updateMemberCount();
+            setInterval(updateMemberCount, 30000);
+            
+            // Update command URLs
+            updateCommandUrls();
+            
+            // Load saved state
+            const savedState = localStorage.getItem('spimf_admin_state');
+            if (savedState) {
+                systemState = { ...systemState, ...JSON.parse(savedState) };
+                updateSystemStatus();
+            }
+            
+            showNotification('Sistem admin berjaya dimuatkan!', 'success');
+        });
 
-            // Load system status
-            const status = localStorage.getItem('spimf_system_status') || 'active';
-            document.getElementById('systemStatus').textContent = status === 'active' ? 'AKTIF' : 'DI BLOCK';
-            document.getElementById('systemStatus').style.color = 
-                status === 'active' ? 'var(--secondary-color)' : 'var(--danger-color)';
-
-            // Simulate member count
-            document.getElementById('totalMembers').textContent = 
-                Math.floor(Math.random() * 100) + 50;
+        // Save state before unload
+        window.addEventListener('beforeunload', function() {
+            localStorage.setItem('spimf_admin_state', JSON.stringify(systemState));
         });
     </script>
 </body>

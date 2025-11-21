@@ -318,23 +318,13 @@
         };
 
         // System State
-        let systemState = {
-            status: 'active',
-            lastCommand: null,
-            commandHistory: []
-        };
+let systemState = {
+    status: 'active',
+    lastCommand: null
+};
 
-        // DOM Elements
-        const systemStatusElement = document.getElementById('systemStatus');
-        const adminTimeElement = document.getElementById('adminTime');
-        const totalMembersElement = document.getElementById('totalMembers');
-        const connectionStatusElement = document.getElementById('connectionStatus');
-        const notificationElement = document.getElementById('notification');
-        const blockUrlElement = document.getElementById('blockUrl');
-        const unblockUrlElement = document.getElementById('unblockUrl');
-        const broadcastUrlElement = document.getElementById('broadcastUrl');
-
-        const API_BASE_URL = 'https://spimf-admin.vercel.app/api';
+// ==================== 🚀 API COMMUNICATION ====================
+const API_BASE_URL = 'https://spimf-admin.vercel.app/api';
 
 // Function untuk send command ke API
 async function sendAdminCommand(action, data = {}) {
@@ -342,7 +332,7 @@ async function sendAdminCommand(action, data = {}) {
         const response = await fetch(`${API_BASE_URL}/system-status`, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer EygKswVMbVU4zcwJFR6HhJLa`,
+                'Authorization': 'Bearer EygKswVMbVU4zcwJFR6HhJLa',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
@@ -394,7 +384,18 @@ async function quickUnblock() {
 async function quickBroadcast(message) {
     await sendAdminCommand('broadcast', { message: message });
 }
+// ==================== END API COMMUNICATION ====================
         
+        // DOM Elements
+        const systemStatusElement = document.getElementById('systemStatus');
+        const adminTimeElement = document.getElementById('adminTime');
+        const totalMembersElement = document.getElementById('totalMembers');
+        const connectionStatusElement = document.getElementById('connectionStatus');
+        const notificationElement = document.getElementById('notification');
+        const blockUrlElement = document.getElementById('blockUrl');
+        const unblockUrlElement = document.getElementById('unblockUrl');
+        const broadcastUrlElement = document.getElementById('broadcastUrl');
+
         // Show notification
         function showNotification(message, type = 'info') {
             const colors = {

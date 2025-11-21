@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPIMF - Sistem Ahli</title>
+    <style>
+        :root {
+            --primary-color: #1a73e8;
+            --secondary-color: #34a853;
+            --accent-color: #fbbc05;
+            --danger-color: #ea4335;
+            --dark-color: #202124;
+            --light-color: #f8f9fa;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: var(--light-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 500px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h1 {
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .status.active {
+            background: rgba(52, 168, 83, 0.2);
+            border: 1px solid var(--secondary-color);
+            color: var(--secondary-color);
+        }
+
+        .status.inactive {
+            background: rgba(234, 67, 53, 0.2);
+            border: 1px solid var(--danger-color);
+            color: var(--danger-color);
+        }
+
+        .time-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin: 15px 0;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin: 10px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--box-shadow);
+        }
+
+        .admin-link {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #8e44ad;
+            color: white;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>👥 SPIMF SYSTEM</h1>
+        <p>Sistem Pengurusan Identiti Membership FareezOnzz</p>
+        
+        <div class="status active" id="statusMessage">
+            ✅ Sistem Aktif - Sedia Digunakan
+        </div>
+
+        <div class="time-info">
+            <h3>⏰ Waktu Operasi</h3>
+            <p>6:00 Pagi - 12:00 Malam</p>
+            <p id="currentTime">Loading masa...</p>
+        </div>
+
+        <div>
+            <button class="btn btn-primary" onclick="enterSystem()">
+                🚀 Masuk Sistem
+            </button>
+            <button class="btn btn-secondary" onclick="showAbout()">
+                ℹ️ Tentang Sistem
+            </button>
+        </div>
+
+        <a href="https://spimf-admin.vercel.app" class="admin-link" target="_blank">
+            🛡️ Akses Sistem Admin
+        </a>
+    </div>
+
+    <script>
+        // Check waktu operasi
+        function checkSystemTime() {
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+            const currentTime = currentHour * 60 + currentMinute;
+            
+            // Waktu operasi: 6:00 AM - 24:00 (6 pagi - 12 malam)
+            const startTime = 6 * 60;   // 6:00 AM
+            const endTime = 24 * 60;    // 12:00 AM
+            
+            const isOperational = currentTime >= startTime && currentTime < endTime;
+            
+            const statusElement = document.getElementById('statusMessage');
+            const currentTimeElement = document.getElementById('currentTime');
+            
+            // Update current time display
+            currentTimeElement.textContent = now.toLocaleTimeString('ms-MY');
+            
+            if (!isOperational) {
+                statusElement.className = 'status inactive';
+                statusElement.innerHTML = '❌ Sistem Ditutup<br><small>Buka: 6:00 Pagi - 12:00 Malam</small>';
+                
+                // Calculate time until next opening
+                let timeUntilOpen;
+                if (currentTime < startTime) {
+                    timeUntilOpen = startTime - currentTime;
+                } else {
+                    timeUntilOpen = (24 * 60 - currentTime) + startTime;
+                }
+                
+                const hours = Math.floor(timeUntilOpen / 60);
+                const minutes = timeUntilOpen % 60;
+                
+                statusElement.innerHTML += `<br><small>Buka semula dalam: ${hours} jam ${minutes} minit</small>`;
+                
+                // Disable enter button
+                document.querySelector('.btn-primary').style.opacity = '0.5';
+                document.querySelector('.btn-primary').style.pointerEvents = 'none';
+            } else {
+                statusElement.className = 'status active';
+                statusElement.innerHTML = '✅ Sistem Aktif - Sedia Digunakan';
+            }
+        }
+
+        // Update time every minute
+        function updateTime() {
+            checkSystemTime();
+            setInterval(checkSystemTime, 60000);
+        }
+
+        // System functions
+        function enterSystem() {
+            alert('Sistem utama untuk ahli - semua fungsi tersedia!');
+            // Di sini Anda boleh redirect ke halaman utama sistem
+            window.location.href = '#main-system'; // Ganti dengan URL sebenar
+        }
+
+        function showAbout() {
+            alert('SPIMF System - Dibangunkan oleh FareezOnzz\n\nSistem Pengurusan Identiti Membership');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTime();
+        });
+    </script>
+</body>
+</html>

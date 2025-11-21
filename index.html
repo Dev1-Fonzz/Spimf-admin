@@ -334,6 +334,67 @@
         const unblockUrlElement = document.getElementById('unblockUrl');
         const broadcastUrlElement = document.getElementById('broadcastUrl');
 
+        const API_BASE_URL = 'https://spimf-admin.vercel.app/api';
+
+// Function untuk send command ke API
+async function sendAdminCommand(action, data = {}) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/system-status`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer EygKswVMbVU4zcwJFR6HhJLa`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                action: action,
+                ...data
+            })
+        });
+        
+        if (response.ok) {
+            const result = await response.json();
+            showNotification(result.message || `Action ${action} berjaya`, 'success');
+            return true;
+        } else {
+            throw new Error('Network response was not ok');
+        }
+    } catch (error) {
+        console.error('Error sending command:', error);
+        showNotification(`Gagal menghantar perintah: ${action}`, 'error');
+        return false;
+    }
+}
+
+// Update existing functions
+async function blockSystem() {
+    const reason = prompt('Masukkan sebab block sistem:') || 'Sistem di-block oleh admin';
+    await sendAdminCommand('block', { reason: reason });
+}
+
+async function activateSystem() {
+    await sendAdminCommand('unblock');
+}
+
+async function sendBroadcast() {
+    const message = prompt('Masukkan mesej broadcast:');
+    if (message) {
+        await sendAdminCommand('broadcast', { message: message });
+    }
+}
+
+// Quick actions
+async function quickBlock(reason) {
+    await sendAdminCommand('block', { reason: reason });
+}
+
+async function quickUnblock() {
+    await sendAdminCommand('unblock');
+}
+
+async function quickBroadcast(message) {
+    await sendAdminCommand('broadcast', { message: message });
+}
+        
         // Show notification
         function showNotification(message, type = 'info') {
             const colors = {

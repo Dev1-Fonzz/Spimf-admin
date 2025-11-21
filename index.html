@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPIMF - Sistem Ahli</title>
+    <title>SPIMF ADMIN - Sistem Pengurusan Admin</title>
     <style>
         :root {
-            --primary-color: #1a73e8;
+            --admin-color: #8e44ad;
             --secondary-color: #34a853;
-            --accent-color: #fbbc05;
             --danger-color: #ea4335;
-            --dark-color: #202124;
+            --dark-color: #1a1a2e;
             --light-color: #f8f9fa;
             --border-radius: 12px;
             --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -25,77 +24,91 @@
         }
 
         body {
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
             color: var(--light-color);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        }
+
+        .admin-header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
             text-align: center;
+            border-bottom: 2px solid var(--admin-color);
+        }
+
+        .admin-badge {
+            background: var(--admin-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 10px;
         }
 
         .container {
-            max-width: 500px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .admin-panel {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
             padding: 30px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: var(--border-radius);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        h1 {
-            color: var(--accent-color);
-            margin-bottom: 20px;
-            font-size: 2.5em;
-        }
-
-        .status {
-            padding: 15px;
-            border-radius: var(--border-radius);
             margin: 20px 0;
-            font-weight: bold;
+            border-left: 4px solid var(--admin-color);
         }
 
-        .status.active {
-            background: rgba(52, 168, 83, 0.2);
-            border: 1px solid var(--secondary-color);
-            color: var(--secondary-color);
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
         }
 
-        .status.inactive {
-            background: rgba(234, 67, 53, 0.2);
-            border: 1px solid var(--danger-color);
-            color: var(--danger-color);
-        }
-
-        .time-info {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
+        .control-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
             border-radius: var(--border-radius);
-            margin: 15px 0;
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .control-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--admin-color);
+        }
+
+        .control-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
         }
 
         .btn {
-            padding: 12px 30px;
+            padding: 12px 24px;
             border: none;
             border-radius: var(--border-radius);
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
-            margin: 10px;
-            text-decoration: none;
-            display: inline-block;
+            margin: 5px;
         }
 
-        .btn-primary {
-            background: var(--primary-color);
+        .btn-admin {
+            background: var(--admin-color);
             color: white;
         }
 
-        .btn-secondary {
+        .btn-success {
             background: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
             color: white;
         }
 
@@ -104,112 +117,160 @@
             box-shadow: var(--box-shadow);
         }
 
-        .admin-link {
+        .status-board {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .status-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            text-align: center;
+        }
+
+        .member-link {
+            display: inline-block;
             margin-top: 20px;
             padding: 10px 20px;
-            background: #8e44ad;
+            background: var(--secondary-color);
             color: white;
             border-radius: var(--border-radius);
             text-decoration: none;
-            display: inline-block;
         }
     </style>
 </head>
 <body>
+    <div class="admin-header">
+        <div class="admin-badge">🛡️ MOD ADMIN - AKSES 24/7</div>
+        <h1>SPIMF ADMIN SYSTEM</h1>
+        <p>Sistem Pengurusan Admin - Kawalan Penuh</p>
+    </div>
+
     <div class="container">
-        <h1>👥 SPIMF SYSTEM</h1>
-        <p>Sistem Pengurusan Identiti Membership FareezOnzz</p>
-        
-        <div class="status active" id="statusMessage">
-            ✅ Sistem Aktif - Sedia Digunakan
+        <div class="admin-panel">
+            <h2>🎛️ DASHBOARD KAWALAN</h2>
+            
+            <div class="status-board">
+                <div class="status-item">
+                    <h3>📊 Status Sistem</h3>
+                    <p id="systemStatus" style="color: var(--secondary-color);">AKTIF</p>
+                </div>
+                <div class="status-item">
+                    <h3>👥 Total Ahli</h3>
+                    <p id="totalMembers">0</p>
+                </div>
+                <div class="status-item">
+                    <h3>🕐 Masa Sistem</h3>
+                    <p id="adminTime">Loading...</p>
+                </div>
+            </div>
+
+            <div class="control-grid">
+                <div class="control-card">
+                    <div class="control-icon">🚫</div>
+                    <h3>Block Sistem</h3>
+                    <p>Block akses ke sistem utama</p>
+                    <button class="btn btn-danger" onclick="blockSystem()">Block Sistem</button>
+                </div>
+
+                <div class="control-card">
+                    <div class="control-icon">✅</div>
+                    <h3>Aktifkan Sistem</h3>
+                    <p>Buka akses ke sistem utama</p>
+                    <button class="btn btn-success" onclick="activateSystem()">Aktifkan Sistem</button>
+                </div>
+
+                <div class="control-card">
+                    <div class="control-icon">📊</div>
+                    <h3>Lihat Statistik</h3>
+                    <p>Analisis penggunaan sistem</p>
+                    <button class="btn btn-admin" onclick="viewStats()">Lihat Statistik</button>
+                </div>
+
+                <div class="control-card">
+                    <div class="control-icon">💾</div>
+                    <h3>Backup Data</h3>
+                    <p>Backup semua data sistem</p>
+                    <button class="btn btn-admin" onclick="backupData()">Backup Data</button>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn btn-admin" onclick="openMemberSystem()">
+                    🔗 Buka Sistem Ahli
+                </button>
+            </div>
         </div>
 
-        <div class="time-info">
-            <h3>⏰ Waktu Operasi</h3>
-            <p>6:00 Pagi - 12:00 Malam</p>
-            <p id="currentTime">Loading masa...</p>
-        </div>
-
-        <div>
-            <button class="btn btn-primary" onclick="enterSystem()">
-                🚀 Masuk Sistem
-            </button>
-            <button class="btn btn-secondary" onclick="showAbout()">
-                ℹ️ Tentang Sistem
-            </button>
-        </div>
-
-        <a href="https://spimf-admin.vercel.app" class="admin-link" target="_blank">
-            🛡️ Akses Sistem Admin
+        <a href="https://spimf-membership.vercel.app" class="member-link" target="_blank">
+            👥 Pergi ke Sistem Ahli
         </a>
     </div>
 
     <script>
-        // Check waktu operasi
-        function checkSystemTime() {
+        // Admin system functions
+        function updateAdminTime() {
             const now = new Date();
-            const currentHour = now.getHours();
-            const currentMinute = now.getMinutes();
-            const currentTime = currentHour * 60 + currentMinute;
-            
-            // Waktu operasi: 6:00 AM - 24:00 (6 pagi - 12 malam)
-            const startTime = 6 * 60;   // 6:00 AM
-            const endTime = 24 * 60;    // 12:00 AM
-            
-            const isOperational = currentTime >= startTime && currentTime < endTime;
-            
-            const statusElement = document.getElementById('statusMessage');
-            const currentTimeElement = document.getElementById('currentTime');
-            
-            // Update current time display
-            currentTimeElement.textContent = now.toLocaleTimeString('ms-MY');
-            
-            if (!isOperational) {
-                statusElement.className = 'status inactive';
-                statusElement.innerHTML = '❌ Sistem Ditutup<br><small>Buka: 6:00 Pagi - 12:00 Malam</small>';
-                
-                // Calculate time until next opening
-                let timeUntilOpen;
-                if (currentTime < startTime) {
-                    timeUntilOpen = startTime - currentTime;
-                } else {
-                    timeUntilOpen = (24 * 60 - currentTime) + startTime;
-                }
-                
-                const hours = Math.floor(timeUntilOpen / 60);
-                const minutes = timeUntilOpen % 60;
-                
-                statusElement.innerHTML += `<br><small>Buka semula dalam: ${hours} jam ${minutes} minit</small>`;
-                
-                // Disable enter button
-                document.querySelector('.btn-primary').style.opacity = '0.5';
-                document.querySelector('.btn-primary').style.pointerEvents = 'none';
-            } else {
-                statusElement.className = 'status active';
-                statusElement.innerHTML = '✅ Sistem Aktif - Sedia Digunakan';
+            document.getElementById('adminTime').textContent = 
+                now.toLocaleString('ms-MY', { 
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+        }
+
+        function blockSystem() {
+            if (confirm('Adakah anda pasti ingin BLOCK sistem utama?')) {
+                localStorage.setItem('spimf_system_status', 'blocked');
+                document.getElementById('systemStatus').textContent = 'DI BLOCK';
+                document.getElementById('systemStatus').style.color = 'var(--danger-color)';
+                alert('Sistem utama telah di BLOCK! 🚫');
             }
         }
 
-        // Update time every minute
-        function updateTime() {
-            checkSystemTime();
-            setInterval(checkSystemTime, 60000);
+        function activateSystem() {
+            localStorage.setItem('spimf_system_status', 'active');
+            document.getElementById('systemStatus').textContent = 'AKTIF';
+            document.getElementById('systemStatus').style.color = 'var(--secondary-color)';
+            alert('Sistem utama telah di AKTIFKAN! ✅');
         }
 
-        // System functions
-        function enterSystem() {
-            alert('Sistem utama untuk ahli - semua fungsi tersedia!');
-            // Di sini Anda boleh redirect ke halaman utama sistem
-            window.location.href = '#main-system'; // Ganti dengan URL sebenar
+        function viewStats() {
+            alert('Fungsi statistik akan dibangunkan kemudian...');
+            // Di sini boleh tambah analytics
         }
 
-        function showAbout() {
-            alert('SPIMF System - Dibangunkan oleh FareezOnzz\n\nSistem Pengurusan Identiti Membership');
+        function backupData() {
+            alert('Fungsi backup akan dibangunkan kemudian...');
+            // Di sini boleh tambah backup functionality
         }
 
-        // Initialize
+        function openMemberSystem() {
+            window.open('https://spimf-membership.vercel.app', '_blank');
+        }
+
+        // Initialize admin system
         document.addEventListener('DOMContentLoaded', function() {
-            updateTime();
+            // Update time every second
+            setInterval(updateAdminTime, 1000);
+            updateAdminTime();
+
+            // Load system status
+            const status = localStorage.getItem('spimf_system_status') || 'active';
+            document.getElementById('systemStatus').textContent = status === 'active' ? 'AKTIF' : 'DI BLOCK';
+            document.getElementById('systemStatus').style.color = 
+                status === 'active' ? 'var(--secondary-color)' : 'var(--danger-color)';
+
+            // Simulate member count
+            document.getElementById('totalMembers').textContent = 
+                Math.floor(Math.random() * 100) + 50;
         });
     </script>
 </body>
